@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pa-exam-prep-db
+    environment:
+      POSTGRES_USER: paprep
+      POSTGRES_PASSWORD: paprep_local
+      POSTGRES_DB: pa_exam_prep
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paprep -d pa_exam_prep"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:

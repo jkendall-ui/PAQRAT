@@ -1,0 +1,422 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────
+
+enum Role {
+  student
+  admin
+}
+
+enum Plan {
+  free
+  pro
+}
+
+enum TargetExam {
+  PANCE
+  PANRE
+}
+
+enum SessionMode {
+  adaptive
+  exam_simulation
+  weak_spot_sprint
+  ecg_interpretation
+}
+
+enum QuestionType {
+  single_best_answer
+  case_based
+}
+
+enum MediaType {
+  image
+  audio
+  video_embed
+  pdf
+  ecg_12lead
+  ecg_rhythm_strip
+  ecg_right_sided
+  ecg_posterior
+  ecg_single_lead
+  algorithm_diagram
+  clinical_image
+  video
+}
+
+enum MediaTiming {
+  initial
+  post_treatment
+  serial
+  comparison
+}
+
+enum SourceType {
+  top_150_ecg
+  ecg_exigency
+  clinical_case
+  ecg_library
+}
+
+enum PrimaryTopic {
+  normal_ecg
+  sinus_rhythms
+  atrial_arrhythmias
+  junctional_rhythms
+  ventricular_arrhythmias
+  heart_blocks
+  bundle_branch_blocks
+  fascicular_blocks
+  pre_excitation
+  acute_coronary_syndromes
+  stemi_equivalents
+  st_segment_changes
+  t_wave_abnormalities
+  axis_deviation
+  chamber_enlargement
+  electrolyte_disturbances
+  drug_effects
+  pericardial_disease
+  cardiomyopathy
+  pacemaker_ecg
+  pediatric_ecg
+  pulmonary_embolism
+  intervals_and_segments
+  ecg_artifacts
+  diagnostic_algorithms
+}
+
+enum LitflCategory {
+  ECG
+  Cardiology
+  ICE
+  Toxicology
+  Metabolic
+  Resus
+  Pulmonary
+  Neurology
+  Other
+}
+
+enum Difficulty {
+  beginner
+  intermediate
+  advanced
+}
+
+enum BoardRelevance {
+  high
+  medium
+  low
+}
+
+enum ClinicalUrgency {
+  emergent
+  urgent
+  routine
+}
+
+enum QuestionFormat {
+  describe_and_interpret
+  what_is_diagnosis
+  identify_features
+  clinical_decision
+  differential_diagnosis
+  algorithm_application
+  compare_ecgs
+}
+
+// ─── Models ──────────────────────────────────────────────
+
+model User {
+  id        String     @id @default(uuid())
+  googleId  String     @unique @map("google_id")
+  email     String     @unique
+  name      String
+  avatarUrl String?    @map("avatar_url")
+  role      Role       @default(student)
+  plan      Plan       @default(free)
+  targetExam TargetExam? @map("target_exam")
+  examDate  DateTime?  @map("exam_date")
+  isBlocked Boolean    @default(false) @map("is_blocked")
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  sessions      AuthSession[]
+  studySessions StudySession[]
+  attempts      Attempt[]
+  topicScores   TopicScore[]
+  bookmarks     Bookmark[]
+
+  @@map("users")
+}
+
+model Category {
+  id           String     @id @default(uuid())
+  name         String
+  ncpaTaskArea String     @map("nccpa_task_area")
+  parentId     String?    @map("parent_id")
+  parent       Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children     Category[] @relation("CategoryHierarchy")
+
+  questions   Question[]
+  topicScores TopicScore[]
+
+  @@map("categories")
+}
+
+model Question {
+  id           String       @id @default(uuid())
+  body         String
+  type         QuestionType
+  difficulty   Int          // 1-5
+  categoryId   String       @map("category_id")
+  category     Category     @relation(fields: [categoryId], references: [id])
+  explanation  String
+  ncpaTaskArea String       @map("nccpa_task_area")
+  isActive     Boolean      @default(true) @map("is_active")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  searchVector Unsupported("tsvector")? @map("search_vector")
+
+  // Case-based fields (nullable for non-case questions)
+  subCaseId          String?         @map("sub_case_id")
+  subCase            SubCase?        @relation(fields: [subCaseId], references: [id])
+  sequence           Int?            // 1-based order within sub-case
+  questionFormat     QuestionFormat? @map("question_format")
+  answerSummary      String?         @map("answer_summary")
+  interpretationText String?         @map("interpretation_text")
+
+  options           QuestionOption[]
+  media             QuestionMedia[]
+  attempts          Attempt[]
+  bookmarks         Bookmark[]
+  ecgFindings       EcgFinding[]
+  answerLinks       AnswerLink[]
+  questionMediaRefs QuestionMediaRef[]
+
+  @@index([categoryId, difficulty, isActive])
+  @@index([subCaseId, sequence])
+  @@map("questions")
+}
+
+model QuestionOption {
+  id         String   @id @default(uuid())
+  questionId String   @map("question_id")
+  question   Question @relation(fields: [questionId], references: [id])
+  body       String
+  isCorrect  Boolean  @map("is_correct")
+  explanation String?
+
+  attempts Attempt[]
+
+  @@map("question_options")
+}
+
+model QuestionMedia {
+  id            String       @id @default(uuid())
+  questionId    String       @map("question_id")
+  question      Question     @relation(fields: [questionId], references: [id])
+  type          MediaType
+  url           String
+  altText       String       @map("alt_text")
+  attribution   String
+  caption       String?
+  mediaRefId    String?      @map("media_ref_id")
+  localFilename String?      @map("local_filename")
+  timing        MediaTiming?
+  subCaseId     String?      @map("sub_case_id")
+  subCase       SubCase?     @relation(fields: [subCaseId], references: [id])
+
+  questionMediaRefs QuestionMediaRef[]
+
+  @@map("question_media")
+}
+
+model StudySession {
+  id        String      @id @default(uuid())
+  userId    String      @map("user_id")
+  user      User        @relation(fields: [userId], references: [id])
+  mode      SessionMode
+  startedAt DateTime    @default(now()) @map("started_at")
+  endedAt   DateTime?   @map("ended_at")
+  aiPlan    Json?       @map("ai_plan")
+
+  attempts Attempt[]
+
+  @@map("study_sessions")
+}
+
+model Attempt {
+  id               String        @id @default(uuid())
+  userId           String        @map("user_id")
+  user             User          @relation(fields: [userId], references: [id])
+  questionId       String        @map("question_id")
+  question         Question      @relation(fields: [questionId], references: [id])
+  sessionId        String        @map("session_id")
+  session          StudySession  @relation(fields: [sessionId], references: [id])
+  selectedOptionId String?       @map("selected_option_id")
+  selectedOption   QuestionOption? @relation(fields: [selectedOptionId], references: [id])
+  isCorrect        Boolean       @map("is_correct")
+  durationMs       Int           @map("duration_ms")
+  confidenceRating Int?          @map("confidence_rating") // 1-3
+  answerFormat     String?       @map("answer_format")     // 'multiple_choice', 'free_text', 'audio'
+  rawResponseText  String?       @map("raw_response_text")
+  createdAt        DateTime      @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@index([userId, questionId])
+  @@map("attempts")
+}
+
+model TopicScore {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  user           User      @relation(fields: [userId], references: [id])
+  categoryId     String    @map("category_id")
+  category       Category  @relation(fields: [categoryId], references: [id])
+  eloScore       Float     @default(1000) @map("elo_score")
+  attemptCount   Int       @default(0) @map("attempt_count")
+  correctCount   Int       @default(0) @map("correct_count")
+  decayFactor    Float     @default(1.0) @map("decay_factor")
+  lastReviewedAt DateTime? @map("last_reviewed_at")
+
+  @@unique([userId, categoryId])
+  @@map("topic_scores")
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  questionId String   @map("question_id")
+  question   Question @relation(fields: [questionId], references: [id])
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, questionId])
+  @@map("bookmarks")
+}
+
+model Case {
+  id             String     @id @default(uuid())
+  caseId         String     @unique @map("case_id")
+  sourceUrl      String     @map("source_url")
+  sourceType     SourceType @map("source_type")
+  title          String
+  authors        String[]
+  lastUpdated    DateTime?  @map("last_updated")
+  keywords       String[]
+  clinicalContext String    @map("clinical_context")
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  subCases       SubCase[]
+  clinicalPearls ClinicalPearl[]
+  caseReferences CaseReference[]
+  caseTags       CaseTag?
+
+  @@index([sourceType])
+  @@map("cases")
+}
+
+model SubCase {
+  id             String   @id @default(uuid())
+  subCaseId      String   @unique @map("sub_case_id")
+  caseDbId       String   @map("case_db_id")
+  case           Case     @relation(fields: [caseDbId], references: [id])
+  subCaseLabel   String?  @map("sub_case_label")
+  subCaseContext String?  @map("sub_case_context")
+
+  questions Question[]
+  media     QuestionMedia[]
+
+  @@index([caseDbId])
+  @@map("sub_cases")
+}
+
+model EcgFinding {
+  id         String   @id @default(uuid())
+  questionId String   @map("question_id")
+  question   Question @relation(fields: [questionId], references: [id])
+  category   String
+  findings   String[]
+  sortOrder  Int      @default(0) @map("sort_order")
+
+  @@index([questionId])
+  @@map("ecg_findings")
+}
+
+model AnswerLink {
+  id         String   @id @default(uuid())
+  questionId String   @map("question_id")
+  question   Question @relation(fields: [questionId], references: [id])
+  text       String
+  url        String
+
+  @@index([questionId])
+  @@map("answer_links")
+}
+
+model QuestionMediaRef {
+  id         String        @id @default(uuid())
+  questionId String        @map("question_id")
+  question   Question      @relation(fields: [questionId], references: [id])
+  mediaId    String        @map("media_id")
+  media      QuestionMedia @relation(fields: [mediaId], references: [id])
+
+  @@unique([questionId, mediaId])
+  @@map("question_media_refs")
+}
+
+model ClinicalPearl {
+  id        String @id @default(uuid())
+  caseDbId  String @map("case_db_id")
+  case      Case   @relation(fields: [caseDbId], references: [id])
+  text      String
+  sortOrder Int    @default(0) @map("sort_order")
+
+  @@index([caseDbId])
+  @@map("clinical_pearls")
+}
+
+model CaseReference {
+  id       String  @id @default(uuid())
+  caseDbId String  @map("case_db_id")
+  case     Case    @relation(fields: [caseDbId], references: [id])
+  citation String
+  url      String?
+
+  @@index([caseDbId])
+  @@map("case_references")
+}
+
+model CaseTag {
+  id              String           @id @default(uuid())
+  caseDbId        String           @unique @map("case_db_id")
+  case            Case             @relation(fields: [caseDbId], references: [id])
+  primaryTopic    PrimaryTopic     @map("primary_topic")
+  secondaryTopics String[]         @map("secondary_topics")
+  litflCategory   LitflCategory    @map("litfl_category")
+  difficulty      Difficulty
+  boardRelevance  BoardRelevance   @map("board_relevance")
+  clinicalUrgency ClinicalUrgency? @map("clinical_urgency")
+
+  @@index([primaryTopic])
+  @@index([difficulty, boardRelevance])
+  @@map("case_tags")
+}
+
+model AuthSession {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  user             User     @relation(fields: [userId], references: [id])
+  refreshTokenHash String   @map("refresh_token_hash")
+  expiresAt        DateTime @map("expires_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@map("sessions")
+}

@@ -1,0 +1,434 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "generated_at": "2026-03-15T15:00:00Z",
+    "total_cases": 3,
+    "total_questions": 7,
+    "source": "LITFL ECG Library — litfl.com",
+    "license": "CC BY-NC-SA 4.0",
+    "target_audience": "Final-year Physician Assistant students — PANCE/PANRE prep"
+  },
+  "cases": [
+
+    {
+      "_comment": "PATTERN 1: Top 150 ECG — single image, single Q&A, clinical pearls",
+      "case_id": "LITFL-ECG-0001",
+      "source_url": "https://litfl.com/ecg-case-001/",
+      "source_type": "top_150_ecg",
+      "title": "ECG Case 001",
+      "authors": ["Ed Burns", "Robert Buttner"],
+      "last_updated": "2024-10-08",
+      "keywords": ["STEMI", "inferior", "right ventricular infarction", "RV", "nitrates", "hypotension"],
+      "clinical_context": "Middle-aged patient presenting with chest pain and diaphoresis. BP dropped to 80/50 following sublingual nitrates.",
+
+      "sub_cases": [
+        {
+          "sub_case_id": "LITFL-ECG-0001-A",
+          "media": [
+            {
+              "media_id": "LITFL-ECG-0001-IMG-01",
+              "type": "ecg_12lead",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/TOP-100-ECQ-QUIZ-LITFL-001.jpg",
+              "local_filename": "LITFL-ECG-0001_01.jpg",
+              "alt_text": "12-lead ECG showing ST elevation in leads II, III, aVF with reciprocal ST depression in I, aVL, V6. ST elevation in V1-2. Sinus rhythm, rate 84 bpm.",
+              "timing": "initial",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            },
+            {
+              "media_id": "LITFL-ECG-0001-IMG-02",
+              "type": "ecg_right_sided",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/TOP-100-ECQ-QUIZ-LITFL-001b.jpg",
+              "local_filename": "LITFL-ECG-0001_02.jpg",
+              "alt_text": "Right-sided ECG showing ST elevation in V4R, confirming right ventricular infarction.",
+              "caption": "This patient also had STE in V4R, confirming the diagnosis of RV infarction.",
+              "timing": "initial",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            }
+          ],
+          "questions": [
+            {
+              "question_id": "LITFL-ECG-0001-A-Q1",
+              "sequence": 1,
+              "question_stem": "Describe and interpret this ECG",
+              "question_format": "describe_and_interpret",
+              "related_media_ids": ["LITFL-ECG-0001-IMG-01"],
+              "answer": {
+                "summary": "Inferior STEMI with right ventricular infarction",
+                "ecg_findings": [
+                  {
+                    "category": "General",
+                    "findings": [
+                      "Sinus rhythm, rate 84bpm",
+                      "Normal axis",
+                      "1st degree AV block (PR 220ms)"
+                    ]
+                  },
+                  {
+                    "category": "Signs of inferior STEMI",
+                    "findings": [
+                      "STE in inferior leads II, III, aVF",
+                      "Reciprocal STD in lateral leads I, aVL, V6"
+                    ]
+                  },
+                  {
+                    "category": "Signs of associated right ventricular infarction",
+                    "findings": [
+                      "STE in III > II",
+                      "STE in V1-2"
+                    ]
+                  }
+                ],
+                "related_links": [
+                  { "text": "inferior STEMI", "url": "https://litfl.com/inferior-stemi-ecg-library/" },
+                  { "text": "right ventricular infarction", "url": "https://litfl.com/right-ventricular-infarction-ecg-library/" },
+                  { "text": "1st degree AV block", "url": "https://litfl.com/first-degree-heart-block-ecg-library/" }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+
+      "clinical_pearls": [
+        "RV infarction complicates 40% of inferior STEMIs",
+        "ST elevation in V1, the only lead that looks directly at the RV, is a suggestive feature",
+        "ST elevation in III > II, as lead III is more rightward facing, is a suggestive feature",
+        "Diagnosis can be confirmed with right-sided leads",
+        "These patients are preload sensitive and may have an exaggerated hypotensive response to nitrates"
+      ],
+
+      "references": [],
+
+      "tags": {
+        "primary_topic": "acute_coronary_syndromes",
+        "secondary_topics": ["heart_blocks", "st_segment_changes"],
+        "litfl_category": "ECG",
+        "difficulty": "beginner",
+        "board_relevance": "high",
+        "clinical_urgency": "emergent"
+      }
+    },
+
+    {
+      "_comment": "PATTERN 2: ECG Exigency — multi-part progressive Q&A with algorithm diagrams",
+      "case_id": "LITFL-EX-0013",
+      "source_url": "https://litfl.com/vt-or-not-vt/",
+      "source_type": "ecg_exigency",
+      "title": "VT or not VT?",
+      "authors": ["Gerard Fennessy"],
+      "last_updated": "2025-12-21",
+      "keywords": ["VT", "BCT", "WCT", "Brugada criteria", "Vereckei"],
+      "clinical_context": "A strange looking patient named William is brought into the ED. The nurse presents his ECG showing a wide complex tachycardia with an axis of 130 degrees.",
+
+      "sub_cases": [
+        {
+          "sub_case_id": "LITFL-EX-0013-A",
+          "media": [
+            {
+              "media_id": "LITFL-EX-0013-IMG-01",
+              "type": "algorithm_diagram",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/Brugada-criteria-VT-diagnosis.png",
+              "local_filename": "LITFL-EX-0013_01.png",
+              "alt_text": "Flowchart showing the 4-step Brugada criteria for differentiating VT from SVT with aberrancy.",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            },
+            {
+              "media_id": "LITFL-EX-0013-IMG-02",
+              "type": "algorithm_diagram",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/verekie-riteria-VT-diagnosis.png",
+              "local_filename": "LITFL-EX-0013_02.png",
+              "alt_text": "Flowchart showing the 4-step Vereckei criteria for differentiating VT from SVT with aberrancy.",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            }
+          ],
+          "questions": [
+            {
+              "question_id": "LITFL-EX-0013-A-Q1",
+              "sequence": 1,
+              "question_stem": "What is the definition of wide complex tachycardia?",
+              "question_format": "identify_features",
+              "answer": {
+                "summary": "WCT = QRS >120ms + rate >100/min",
+                "ecg_findings": [
+                  {
+                    "category": "Definition",
+                    "findings": [
+                      "QRS complex must be wide: >120ms (>3 small squares)",
+                      "Patient must be tachycardic: >100/min"
+                    ]
+                  },
+                  {
+                    "category": "Differential diagnosis of WCT",
+                    "findings": [
+                      "Ventricular tachycardia (VT)",
+                      "Supraventricular tachycardia (SVT) with aberrancy",
+                      "Pacemaker rhythms"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "question_id": "LITFL-EX-0013-A-Q2",
+              "sequence": 2,
+              "question_stem": "What clinical features help differentiate VT from SVT?",
+              "question_format": "differential_diagnosis",
+              "answer": {
+                "summary": "History, exam findings, and ECG features all contribute — VT is more common overall (80%, up to 95% in IHD)",
+                "ecg_findings": [
+                  {
+                    "category": "History favouring VT",
+                    "findings": [
+                      "No prior history of tachycardia",
+                      "History of structural cardiac disease",
+                      "Known pacemaker or ICD"
+                    ]
+                  },
+                  {
+                    "category": "Examination favouring VT",
+                    "findings": [
+                      "Unstable patient",
+                      "Cardiac failure",
+                      "Midline sternotomy scar",
+                      "Cannon a-waves",
+                      "Heart sound fluctuations (especially S1)"
+                    ]
+                  },
+                  {
+                    "category": "ECG features favouring VT",
+                    "findings": [
+                      "Extreme right axis",
+                      "Minor rate variation",
+                      "Chest lead concordance"
+                    ]
+                  },
+                  {
+                    "category": "ECG features favouring SVT",
+                    "findings": [
+                      "Rate exactly 150/min",
+                      "Narrower QRS width (120-140ms)"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "question_id": "LITFL-EX-0013-A-Q3",
+              "sequence": 3,
+              "question_stem": "Which algorithms can help differentiate SVT/aberrant conduction from VT?",
+              "question_format": "algorithm_application",
+              "related_media_ids": ["LITFL-EX-0013-IMG-01", "LITFL-EX-0013-IMG-02"],
+              "answer": {
+                "summary": "Brugada criteria and Vereckei criteria — both ~90% accurate, both use a simple 4-step process",
+                "ecg_findings": [
+                  {
+                    "category": "Brugada Criteria performance",
+                    "findings": [
+                      "Sensitivity: 98.7%",
+                      "Specificity: 96.5%",
+                      "Test accuracy: 90% (self-reported)"
+                    ]
+                  },
+                  {
+                    "category": "Vereckei Criteria performance",
+                    "findings": [
+                      "Sensitivity: 95.7%",
+                      "Specificity: 73.4%",
+                      "Test accuracy: 90% (self-reported)"
+                    ]
+                  }
+                ],
+                "interpretation_text": "Both criteria involve a simple four-step process. However, both get it wrong about 10% of the time. In the unstable patient, the distinction between SVT and VT is academic — they need urgent action (DC shock or a fast-acting antiarrhythmic)."
+              }
+            }
+          ]
+        }
+      ],
+
+      "clinical_pearls": [],
+
+      "references": [
+        {
+          "citation": "Brugada P, Brugada J, Mont L, Smeets J, Andries EW. A new approach to the differential diagnosis of a regular tachycardia with a wide QRS complex. Circulation. 1991 May;83(5):1649-59."
+        },
+        {
+          "citation": "Vereckei A, Duray G, Szénási G, Altemose GT, Miller JM. Application of a new algorithm in the differential diagnosis of wide QRS complex tachycardia. Eur Heart J. 2007 Mar;28(5):589-600."
+        }
+      ],
+
+      "tags": {
+        "primary_topic": "ventricular_arrhythmias",
+        "secondary_topics": ["diagnostic_algorithms", "bundle_branch_blocks"],
+        "litfl_category": "ECG",
+        "difficulty": "intermediate",
+        "board_relevance": "high",
+        "clinical_urgency": "emergent"
+      }
+    },
+
+    {
+      "_comment": "PATTERN 3: ECG Exigency with multiple sub-cases and before/after ECGs",
+      "case_id": "LITFL-EX-0012",
+      "source_url": "https://litfl.com/metabolic-mayhem/",
+      "source_type": "ecg_exigency",
+      "title": "Metabolic Mayhem",
+      "authors": ["Ed Burns"],
+      "last_updated": "2025-12-21",
+      "keywords": ["severe hypokalaemia", "spironolactone", "rhabdomyolysis", "ECG", "u wave", "diabetic ketoacidosis"],
+      "clinical_context": "Two quick ECG cases for you!",
+
+      "sub_cases": [
+        {
+          "sub_case_id": "LITFL-EX-0012-A",
+          "sub_case_label": "Case 1",
+          "sub_case_context": "A 30-year old female with a history of Conn syndrome secondary to bilateral adrenal adenomas presents with generalised weakness and muscle pains after a change in her medications.",
+          "media": [
+            {
+              "media_id": "LITFL-EX-0012-IMG-01",
+              "type": "ecg_12lead",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/ECG-Exigency-012a.jpg",
+              "local_filename": "LITFL-EX-0012_01.jpg",
+              "alt_text": "12-lead ECG showing sinus rhythm, long QT interval, widespread downsloping ST depression with T wave inversion, and prominent U waves especially in precordial leads.",
+              "timing": "initial",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            }
+          ],
+          "questions": [
+            {
+              "question_id": "LITFL-EX-0012-A-Q1",
+              "sequence": 1,
+              "question_stem": "Describe the ECG.",
+              "question_format": "describe_and_interpret",
+              "related_media_ids": ["LITFL-EX-0012-IMG-01"],
+              "answer": {
+                "summary": "Severe hypokalaemia with prolonged QT, ST depression, T wave inversion, and prominent U waves",
+                "ecg_findings": [
+                  {
+                    "category": "General",
+                    "findings": [
+                      "Sinus rhythm at around 70 bpm",
+                      "Normal axis",
+                      "PR interval 200ms (upper limit of normal)",
+                      "Long QT (640ms, QTc 700ms)",
+                      "Widespread downsloping ST depression / T wave inversion",
+                      "Prominent U waves, especially in the precordial leads"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "question_id": "LITFL-EX-0012-A-Q2",
+              "sequence": 2,
+              "question_stem": "What is the diagnosis?",
+              "question_format": "what_is_diagnosis",
+              "related_media_ids": ["LITFL-EX-0012-IMG-01"],
+              "answer": {
+                "summary": "Severe hypokalaemia (K+ 1.7 mmol/L) — stopped spironolactone in Conn syndrome patient",
+                "ecg_findings": [
+                  {
+                    "category": "Pathognomonic combination",
+                    "findings": [
+                      "Markedly prolonged QT interval",
+                      "Widespread ST depression and T wave inversion",
+                      "Prominent U waves"
+                    ]
+                  }
+                ],
+                "interpretation_text": "This patient's potassium was 1.7 mmol/L (she had recently stopped taking her spironolactone). The muscle pain was rhabdomyolysis secondary to hypokalaemia. She was treated in the high-dependency area for 3 days on a continuous potassium drip and made a good recovery.",
+                "related_links": [
+                  { "text": "ECG features of hypokalaemia", "url": "https://litfl.com/hypokalaemia-ecg-library/" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "sub_case_id": "LITFL-EX-0012-B",
+          "sub_case_label": "Case 2",
+          "sub_case_context": "A 24-year old male with type 1 diabetes presents to ED with 2 days of nausea and vomiting.",
+          "media": [
+            {
+              "media_id": "LITFL-EX-0012-IMG-02",
+              "type": "ecg_12lead",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/ECG-Exigency-012b.jpg",
+              "local_filename": "LITFL-EX-0012_02.jpg",
+              "alt_text": "12-lead ECG showing sinus tachycardia at 120 bpm, inferior axis, markedly peaked T waves especially in V3-V4.",
+              "timing": "initial",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            },
+            {
+              "media_id": "LITFL-EX-0012-IMG-03",
+              "type": "ecg_12lead",
+              "url": "https://litfl.com/wp-content/uploads/2018/09/ECG-Exigency-012c.jpg",
+              "local_filename": "LITFL-EX-0012_03.jpg",
+              "alt_text": "12-lead ECG after treatment showing resolution of peaked T waves, potassium now 5.5 mmol/L.",
+              "caption": "Potassium now 5.5, T wave changes resolving",
+              "timing": "post_treatment",
+              "attribution": "LITFL ECG Library, CC BY-NC-SA 4.0"
+            }
+          ],
+          "questions": [
+            {
+              "question_id": "LITFL-EX-0012-B-Q1",
+              "sequence": 1,
+              "question_stem": "Describe the ECG.",
+              "question_format": "describe_and_interpret",
+              "related_media_ids": ["LITFL-EX-0012-IMG-02"],
+              "answer": {
+                "summary": "Hyperkalaemia secondary to DKA (K+ 8.5 mmol/L)",
+                "ecg_findings": [
+                  {
+                    "category": "General",
+                    "findings": [
+                      "Sinus tachycardia at 120 bpm",
+                      "Inferior axis (+90 degrees)",
+                      "Normal intervals",
+                      "Markedly peaked T waves, particularly in V3-4"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "question_id": "LITFL-EX-0012-B-Q2",
+              "sequence": 2,
+              "question_stem": "What is the diagnosis?",
+              "question_format": "what_is_diagnosis",
+              "related_media_ids": ["LITFL-EX-0012-IMG-02", "LITFL-EX-0012-IMG-03"],
+              "answer": {
+                "summary": "Hyperkalaemia secondary to diabetic ketoacidosis (K+ 8.5 mmol/L)",
+                "ecg_findings": [
+                  {
+                    "category": "Key finding",
+                    "findings": [
+                      "Markedly peaked T waves are the hallmark of hyperkalaemia"
+                    ]
+                  }
+                ],
+                "interpretation_text": "This patient's potassium was 8.5 mmol/L. The post-treatment ECG (K+ 5.5 mmol/L) shows resolution of the peaked T waves.",
+                "related_links": [
+                  { "text": "ECG features of hyperkalaemia", "url": "https://litfl.com/hyperkalaemia-ecg-library/" }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+
+      "clinical_pearls": [],
+
+      "references": [],
+
+      "tags": {
+        "primary_topic": "electrolyte_disturbances",
+        "secondary_topics": ["t_wave_abnormalities", "intervals_and_segments"],
+        "litfl_category": "ECG",
+        "difficulty": "beginner",
+        "board_relevance": "high",
+        "clinical_urgency": "emergent"
+      }
+    }
+
+  ]
+}

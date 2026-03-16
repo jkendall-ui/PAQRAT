@@ -1,0 +1,342 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ECG Quiz Question Bank — LITFL Sourced",
+  "description": "Schema designed to capture ECG case data from LITFL's clinical cases database, including Top 150 ECG self-assessment cases and ECG Exigency clinical cases. Supports single-image interpretation, multi-part progressive Q&A, before/after ECG comparisons, and algorithm-based teaching cases.",
+  "type": "object",
+  "properties": {
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version":          { "type": "string", "example": "2.0.0" },
+        "generated_at":     { "type": "string", "format": "date-time" },
+        "total_cases":      { "type": "integer", "description": "Number of top-level cases in this export." },
+        "total_questions":  { "type": "integer", "description": "Sum of all questions across all cases." },
+        "source":           { "type": "string", "example": "LITFL ECG Library — litfl.com" },
+        "license":          { "type": "string", "example": "CC BY-NC-SA 4.0" },
+        "target_audience":  { "type": "string", "example": "Final-year Physician Assistant students — PANCE/PANRE prep" }
+      },
+      "required": ["version", "generated_at", "total_cases", "total_questions", "source", "license"]
+    },
+
+    "cases": {
+      "type": "array",
+      "description": "Each case represents one LITFL page. A case may contain one or more sub-cases (e.g., 'Metabolic Mayhem' has Case 1 and Case 2), and each sub-case may have multiple progressive questions.",
+      "items": {
+        "type": "object",
+        "properties": {
+
+          "case_id": {
+            "type": "string",
+            "description": "Unique case identifier. Format: LITFL-ECG-XXXX for Top 150, LITFL-EX-XXXX for ECG Exigency, LITFL-CC-XXXX for other Clinical Cases.",
+            "pattern": "^LITFL-(ECG|EX|CC)-[0-9]{4}$",
+            "examples": ["LITFL-ECG-0001", "LITFL-EX-0013", "LITFL-CC-0042"]
+          },
+
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Original LITFL page URL for this case.",
+            "example": "https://litfl.com/ecg-case-001/"
+          },
+
+          "source_type": {
+            "type": "string",
+            "enum": ["top_150_ecg", "ecg_exigency", "clinical_case", "ecg_library"],
+            "description": "Which LITFL collection this case comes from."
+          },
+
+          "title": {
+            "type": "string",
+            "description": "LITFL page title.",
+            "example": "ECG Case 001"
+          },
+
+          "authors": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Ed Burns", "Robert Buttner"]
+          },
+
+          "last_updated": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the LITFL page was last updated."
+          },
+
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Keywords from the LITFL clinical cases database searchable fields.",
+            "example": ["STEMI", "hyperacute", "myocardial ischemia", "anterior"]
+          },
+
+          "clinical_context": {
+            "type": "string",
+            "description": "The overarching clinical vignette or narrative that opens the case. For Top 150 cases this is typically one line; for ECG Exigency cases this can be a multi-paragraph narrative.",
+            "example": "Middle-aged patient presenting with chest pain and diaphoresis. BP dropped to 80/50 following sublingual nitrates."
+          },
+
+          "sub_cases": {
+            "type": "array",
+            "description": "Some LITFL pages contain multiple distinct ECG cases (e.g., 'Metabolic Mayhem' has Case 1: hypokalaemia and Case 2: hyperkalaemia). Single-case pages have one sub_case.",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+
+                "sub_case_id": {
+                  "type": "string",
+                  "description": "Sub-case identifier. Format: {case_id}-{letter}",
+                  "example": "LITFL-EX-0012-A"
+                },
+
+                "sub_case_label": {
+                  "type": "string",
+                  "description": "Display label if multiple sub-cases exist.",
+                  "example": "Case 1"
+                },
+
+                "sub_case_context": {
+                  "type": "string",
+                  "description": "Clinical context specific to this sub-case (if different from the parent case context).",
+                  "example": "A 30-year old female with a history of Conn syndrome secondary to bilateral adrenal adenomas presents with generalised weakness and muscle pains after a change in her medications."
+                },
+
+                "media": {
+                  "type": "array",
+                  "description": "All ECG images, rhythm strips, algorithm diagrams, and before/after comparisons for this sub-case.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "media_id": {
+                        "type": "string",
+                        "description": "Unique media identifier within this case.",
+                        "example": "LITFL-ECG-0001-IMG-01"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["ecg_12lead", "ecg_rhythm_strip", "ecg_right_sided", "ecg_posterior", "ecg_single_lead", "algorithm_diagram", "clinical_image", "video"],
+                        "description": "Distinguishes ECG tracings from teaching diagrams and other media."
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Direct URL to the image file on LITFL's CDN or local asset path."
+                      },
+                      "local_filename": {
+                        "type": "string",
+                        "description": "Local filename after download. Convention: {case_id}_{sequence}.{ext}",
+                        "example": "LITFL-ECG-0001_01.jpg"
+                      },
+                      "alt_text": {
+                        "type": "string",
+                        "description": "Accessible description of the image content."
+                      },
+                      "caption": {
+                        "type": "string",
+                        "description": "Caption or contextual note from the LITFL page, e.g. 'This patient also had STE in V4R, confirming the diagnosis of RV infarction' or 'Potassium now 5.5, T wave changes resolving'."
+                      },
+                      "timing": {
+                        "type": "string",
+                        "enum": ["initial", "post_treatment", "serial", "comparison"],
+                        "description": "When this ECG was taken relative to the clinical scenario. Supports before/after presentation."
+                      },
+                      "attribution": {
+                        "type": "string",
+                        "default": "LITFL ECG Library, CC BY-NC-SA 4.0"
+                      }
+                    },
+                    "required": ["media_id", "type", "url", "local_filename", "alt_text", "attribution"]
+                  }
+                },
+
+                "questions": {
+                  "type": "array",
+                  "description": "Progressive questions for this sub-case. LITFL typically uses 'Describe and interpret this ECG' as Q1, followed by diagnosis/management questions. Each question maps to an expandable 'Answer and Interpretation' section.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+
+                      "question_id": {
+                        "type": "string",
+                        "description": "Unique question identifier. Format: {sub_case_id}-Q{number}",
+                        "example": "LITFL-ECG-0001-A-Q1"
+                      },
+
+                      "sequence": {
+                        "type": "integer",
+                        "description": "Order of this question within the sub-case (1-based). Questions are meant to be answered sequentially.",
+                        "minimum": 1
+                      },
+
+                      "question_stem": {
+                        "type": "string",
+                        "description": "The question as written on LITFL. May be open-ended ('Describe and interpret this ECG') or specific ('What is the diagnosis?').",
+                        "example": "Describe and interpret this ECG"
+                      },
+
+                      "question_format": {
+                        "type": "string",
+                        "enum": ["describe_and_interpret", "what_is_diagnosis", "identify_features", "clinical_decision", "differential_diagnosis", "algorithm_application", "compare_ecgs"],
+                        "description": "Categorizes the question type based on LITFL's actual question patterns."
+                      },
+
+                      "related_media_ids": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Which media items from this sub-case are relevant to this question. References media_id values.",
+                        "example": ["LITFL-ECG-0001-IMG-01"]
+                      },
+
+                      "answer": {
+                        "type": "object",
+                        "description": "The 'Answer and Interpretation' section from LITFL.",
+                        "properties": {
+
+                          "summary": {
+                            "type": "string",
+                            "description": "One-line diagnosis or key conclusion.",
+                            "example": "Inferior STEMI with right ventricular infarction"
+                          },
+
+                          "ecg_findings": {
+                            "type": "array",
+                            "description": "Structured list of ECG findings from the LITFL answer. Preserves the hierarchical structure (general findings, specific signs).",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "category": {
+                                  "type": "string",
+                                  "description": "Grouping label from LITFL, e.g. 'General', 'Signs of inferior STEMI', 'Signs of associated right ventricular infarction'.",
+                                  "example": "Signs of inferior STEMI"
+                                },
+                                "findings": {
+                                  "type": "array",
+                                  "items": { "type": "string" },
+                                  "example": ["STE in inferior leads II, III, aVF", "Reciprocal STD in lateral leads I, aVL, V6"]
+                                }
+                              },
+                              "required": ["category", "findings"]
+                            }
+                          },
+
+                          "interpretation_text": {
+                            "type": "string",
+                            "description": "Full prose explanation from the LITFL answer, for cases where the answer is narrative rather than a findings list."
+                          },
+
+                          "related_links": {
+                            "type": "array",
+                            "description": "Links to LITFL reference pages embedded in the answer (e.g., links to 'inferior STEMI' or 'right ventricular infarction' library pages).",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "text": { "type": "string", "example": "inferior STEMI" },
+                                "url":  { "type": "string", "format": "uri", "example": "https://litfl.com/inferior-stemi-ecg-library/" }
+                              },
+                              "required": ["text", "url"]
+                            }
+                          }
+                        },
+                        "required": ["summary", "ecg_findings"]
+                      }
+                    },
+                    "required": ["question_id", "sequence", "question_stem", "question_format", "answer"]
+                  }
+                }
+              },
+              "required": ["sub_case_id", "media", "questions"]
+            }
+          },
+
+          "clinical_pearls": {
+            "type": "array",
+            "description": "High-yield teaching points from the 'CLINICAL PEARLS' section. Not all cases have this.",
+            "items": { "type": "string" },
+            "example": [
+              "RV infarction complicates 40% of inferior STEMIs",
+              "These patients are preload sensitive and may have an exaggerated hypotensive response to nitrates"
+            ]
+          },
+
+          "references": {
+            "type": "array",
+            "description": "Academic references cited on the LITFL page.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "citation": { "type": "string" },
+                "url":      { "type": "string", "format": "uri" }
+              },
+              "required": ["citation"]
+            }
+          },
+
+          "tags": {
+            "type": "object",
+            "description": "Classification tags for quiz filtering and board-prep prioritization.",
+            "properties": {
+              "primary_topic": {
+                "type": "string",
+                "enum": [
+                  "normal_ecg",
+                  "sinus_rhythms",
+                  "atrial_arrhythmias",
+                  "junctional_rhythms",
+                  "ventricular_arrhythmias",
+                  "heart_blocks",
+                  "bundle_branch_blocks",
+                  "fascicular_blocks",
+                  "pre_excitation",
+                  "acute_coronary_syndromes",
+                  "stemi_equivalents",
+                  "st_segment_changes",
+                  "t_wave_abnormalities",
+                  "axis_deviation",
+                  "chamber_enlargement",
+                  "electrolyte_disturbances",
+                  "drug_effects",
+                  "pericardial_disease",
+                  "cardiomyopathy",
+                  "pacemaker_ecg",
+                  "pediatric_ecg",
+                  "pulmonary_embolism",
+                  "intervals_and_segments",
+                  "ecg_artifacts",
+                  "diagnostic_algorithms"
+                ]
+              },
+              "secondary_topics": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "litfl_category": {
+                "type": "string",
+                "description": "The LITFL database 'Topic' column value.",
+                "enum": ["ECG", "Cardiology", "ICE", "Toxicology", "Metabolic", "Resus", "Pulmonary", "Neurology", "Other"]
+              },
+              "difficulty": {
+                "type": "string",
+                "enum": ["beginner", "intermediate", "advanced"]
+              },
+              "board_relevance": {
+                "type": "string",
+                "enum": ["high", "medium", "low"],
+                "description": "PANCE/PANRE likelihood."
+              },
+              "clinical_urgency": {
+                "type": "string",
+                "enum": ["emergent", "urgent", "routine"]
+              }
+            },
+            "required": ["primary_topic", "litfl_category", "difficulty", "board_relevance"]
+          }
+
+        },
+        "required": ["case_id", "source_url", "source_type", "title", "authors", "keywords", "clinical_context", "sub_cases", "tags"]
+      }
+    }
+  },
+  "required": ["metadata", "cases"]
+}
