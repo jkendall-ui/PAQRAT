@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json ./
-RUN npm install --ignore-scripts
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY prisma ./prisma
 RUN npx prisma generate
 COPY tsconfig.json ./
@@ -13,7 +13,8 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY package.json ./
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
