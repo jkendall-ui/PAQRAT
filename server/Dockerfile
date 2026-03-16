@@ -1,6 +1,6 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 COPY prisma ./prisma
 RUN npx prisma generate
@@ -15,6 +15,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY package.json ./
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["./start.sh"]
