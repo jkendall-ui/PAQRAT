@@ -1,6 +1,5 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-# Cache-bust: 2026-03-17T14
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY prisma ./prisma

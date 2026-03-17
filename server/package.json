@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "PA Exam Prep API — Express + Prisma + PostgreSQL",
-  "main": "dist/index.js",
+  "main": "dist/startup.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
