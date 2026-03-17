@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY prisma ./prisma
 RUN npx prisma generate
 COPY tsconfig.json ./
@@ -19,4 +19,4 @@ COPY start.sh ./start.sh
 RUN chmod +x ./start.sh
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["./start.sh"]
+ENTRYPOINT ["/bin/sh", "./start.sh"]

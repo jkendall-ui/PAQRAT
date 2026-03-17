@@ -1,15 +1,19 @@
 #!/bin/sh
-set -e
+echo "=== CONTAINER START ==="
+echo "date: $(date)"
+echo "PORT=${PORT:-not set}"
+echo "NODE_ENV=${NODE_ENV:-not set}"
+echo "node: $(node --version 2>&1 || echo MISSING)"
+echo "pwd: $(pwd)"
+echo "ls dist/: $(ls dist/ 2>&1)"
 
-echo "=== PA Exam Prep Server Starting ==="
-echo "DATABASE_URL is set: $(test -n "$DATABASE_URL" && echo 'yes' || echo 'NO')"
-echo "GOOGLE_CLIENT_ID is set: $(test -n "$GOOGLE_CLIENT_ID" && echo 'yes' || echo 'NO')"
-echo "JWT_SECRET is set: $(test -n "$JWT_SECRET" && echo 'yes' || echo 'NO')"
-echo "PORT: ${PORT:-3000}"
-echo "NODE_ENV: $NODE_ENV"
+echo "=== PRISMA MIGRATE ==="
+npx prisma migrate deploy 2>&1 || echo "WARN: migrate had issues"
 
-echo "Running prisma migrate deploy..."
-npx prisma migrate deploy 2>&1 || echo "WARNING: migrate failed but continuing..."
+echo "=== MODULE CHECK ==="
+node -e "require('bcryptjs'); console.log('bcryptjs OK')" 2>&1
+node -e "require('@prisma/client'); console.log('prisma OK')" 2>&1
+node -e "require('express'); console.log('express OK')" 2>&1
 
-echo "=== Starting node server ==="
+echo "=== STARTING NODE ==="
 exec node dist/index.js
