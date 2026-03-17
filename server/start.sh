@@ -1,19 +1,11 @@
 #!/bin/sh
-echo "=== CONTAINER START ==="
-echo "date: $(date)"
-echo "PORT=${PORT:-not set}"
-echo "NODE_ENV=${NODE_ENV:-not set}"
-echo "node: $(node --version 2>&1 || echo MISSING)"
-echo "pwd: $(pwd)"
-echo "ls dist/: $(ls dist/ 2>&1)"
 
-echo "=== PRISMA MIGRATE ==="
-npx prisma migrate deploy 2>&1 || echo "WARN: migrate had issues"
+echo "=== CONTAINER START ===" >&2
+echo "PORT=${PORT:-not set}" >&2
+echo "NODE_ENV=${NODE_ENV:-not set}" >&2
 
-echo "=== MODULE CHECK ==="
-node -e "require('bcryptjs'); console.log('bcryptjs OK')" 2>&1
-node -e "require('@prisma/client'); console.log('prisma OK')" 2>&1
-node -e "require('express'); console.log('express OK')" 2>&1
+echo "=== PRISMA MIGRATE ===" >&2
+npx prisma migrate deploy 2>&1 >&2 || echo "WARN: migrate had issues" >&2
 
-echo "=== STARTING NODE ==="
-exec node dist/index.js
+echo "=== STARTING NODE ===" >&2
+exec node dist/index.js 2>&1

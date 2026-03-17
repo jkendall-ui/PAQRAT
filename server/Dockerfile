@@ -15,8 +15,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY package.json ./
-COPY start.sh ./start.sh
-RUN chmod +x ./start.sh
 ENV NODE_ENV=production
 EXPOSE 3000
-ENTRYPOINT ["/bin/sh", "./start.sh"]
+CMD ["node", "dist/startup.js"]
