@@ -12,9 +12,9 @@ type AnswerFormat = 'multiple_choice' | 'free_text' | 'audio';
 interface GapCategory { categoryId: string; categoryName: string; reason: string; }
 
 const modeCards: { value: StudyMode; label: string; description: string; icon: typeof Brain }[] = [
-  { value: 'adaptive', label: 'Adaptive Session', description: 'AI-powered questions that adapt to your level', icon: Brain },
-  { value: 'exam_simulation', label: 'Exam Simulation', description: 'Timed practice that mirrors the real PA exam', icon: BookOpen },
-  { value: 'weak_spot_sprint', label: 'Weak Spot Sprint', description: 'Focus on your weakest topic areas', icon: Zap },
+  // { value: 'adaptive', label: 'Adaptive Session', description: 'AI-powered questions that adapt to your level', icon: Brain },
+  // { value: 'exam_simulation', label: 'Exam Simulation', description: 'Timed practice that mirrors the real PA exam', icon: BookOpen },
+  // { value: 'weak_spot_sprint', label: 'Weak Spot Sprint', description: 'Focus on your weakest topic areas', icon: Zap },
   { value: 'ecg_interpretation', label: 'ECG Interpretation', description: 'Read ECGs step-by-step with AI feedback', icon: HeartPulse },
 ];
 

@@ -407,11 +407,14 @@ function EcgInterpretationSession({ session, token }: { session: SessionData; to
       {!result ? (
         <>
           {/* Dev auto-fill button */}
-          <button type="button" onClick={handleAutoFill}
-            className="self-end text-xs text-gray-400 hover:text-blue-500 transition-colors"
-            data-testid="auto-fill-btn">
-            🎲 Auto-fill (dev)
-          </button>
+          <div className="flex items-center justify-end gap-2">
+            <span className="text-xs text-gray-300 font-mono select-all">{question.id}</span>
+            <button type="button" onClick={handleAutoFill}
+              className="text-xs text-gray-400 hover:text-blue-500 transition-colors"
+              data-testid="auto-fill-btn">
+              🎲 Auto-fill (dev)
+            </button>
+          </div>
 
           {/* Step indicators */}
           <div className="flex flex-wrap gap-1.5" data-testid="step-indicators">
